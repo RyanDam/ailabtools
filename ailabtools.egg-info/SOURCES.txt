@@ -1,0 +1,8 @@
+MANIFEST.in
+README.md
+ailabtools/common.py
+ailabtools.egg-info/PKG-INFO
+ailabtools.egg-info/SOURCES.txt
+ailabtools.egg-info/dependency_links.txt
+ailabtools.egg-info/requires.txt
+ailabtools.egg-info/top_level.txt
