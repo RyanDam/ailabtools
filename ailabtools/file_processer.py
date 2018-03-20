@@ -23,6 +23,7 @@ def __change_namge(cur_name, new_name):
     print('to', new_name)
     print()
 
+#Adjust file's extension
 def adj_extension(_dir):
     if not os.path.isdir(_dir):
         raise Exception('{} is not a directory!'.format(_dir))
@@ -69,7 +70,7 @@ def adj_extension(_dir):
     print('Number of images remain:', num_img - num_img_not_in_list_extensions)
 
 
-
+#remove duplicate file (bit level)
 def rm_duplicate(_dir):
     if not os.path.isdir(_dir):
         raise Exception('{} is not a directory!'.format(_dir))
@@ -97,6 +98,7 @@ def rm_duplicate(_dir):
     print('Number of images duplicate:', num_duplicate)
     print('Number of images remain:', len(image_paths) - num_duplicate)
 
+#remove file which PIL can't read
 def rm_unreadable(_dir):
 
     if not os.path.isdir(_dir):
