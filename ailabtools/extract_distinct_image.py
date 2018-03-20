@@ -20,9 +20,12 @@ def get_hash_images(im_dir):
 
 def get_hash_video(video_dir, num_skip_frame):
     video = cv2.VideoCapture(video_dir)
-    video_len = int(video.get(cv2.CAP_PROP_FRAME_COUNT)) - 1 #last frame usually broken
+    
     if not video.isOpened():
         raise Exception('Cant open video {}!'.format(video_dir))
+    
+    video_len = int(video.get(cv2.CAP_PROP_FRAME_COUNT)) - 1 #last frame usually broken
+    
     
     if num_skip_frame > video_len:
         raise Exception('num_skip_frame({}) must less than total frame of video({})!'.format(num_skip_frame, 
@@ -43,9 +46,12 @@ def get_hash_video(video_dir, num_skip_frame):
     
 def save_frame_video(video_dir, frame_id, dest_dir):
     video = cv2.VideoCapture(video_dir)
-    video_len = int(video.get(cv2.CAP_PROP_FRAME_COUNT)) - 1 #last frame usually broken
+    
     if not video.isOpened():
         raise Exception('Cant open video {}!'.format(video_dir))
+    
+    video_len = int(video.get(cv2.CAP_PROP_FRAME_COUNT)) - 1 #last frame usually broken
+    
     
     video_name = video_dir.split('/')[-1].split('.')[0]
     for i in range(video_len):
