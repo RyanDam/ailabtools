@@ -1,6 +1,3 @@
-import os
-import sys
-from glob import glob
 import magic
 import hashlib
 from subprocess import call
