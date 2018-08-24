@@ -3,6 +3,7 @@ import imageio
 import imagehash
 from PIL import Image
 from multiprocessing import Pool
+from ailabtools.multiprocessing import pool_worker
 
 def __get_average_hash(path):
     im = Image.open(path)
@@ -18,8 +19,7 @@ def __extract_distinct_hash_indexes(hashes, min_distant=2):
             distinct_indexs.append(i)
     return distinct_indexs
 
-
-def extract_distinct_video(video_path, dest_dir, size=None, fps=1, min_distant=2, num_worker=4):
+def extract_distinct_video(video_path, dest_dir, size=None, fps=1, min_distant=2, num_worker=4, verbose=True):
     """Extract distinct frame of video and save to dest_dir
 
     Parameters
@@ -37,21 +37,23 @@ def extract_distinct_video(video_path, dest_dir, size=None, fps=1, min_distant=2
         minimum distant of average hash of frame (http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html)
     num_worker: int
         number of worker
+    verbose: bool
+        True: progress bar
+        False: silent
 
     Returns
     -------
     None
     """
     video = imageio.get_reader(video_path, format='ffmpeg', size=size, fps=fps)
-    with Pool(num_worker) as p:
-        hashes = p.map(imagehash.average_hash, [Image.fromarray(video.get_data(i)) for i in range(len(video))])
+    frames = [Image.fromarray(video.get_data(i)) for i in range(len(video))]
+    hashes = pool_worker(imagehash.average_hash, frames, num_worker, verbose)
     distinct_indexs = __extract_distinct_hash_indexes(hashes, min_distant)
     
     for index in distinct_indexs:
         Image.fromarray(video.get_data(index)).save(os.path.join(dest_dir, '{:05}.png'.format(index)))
 
-
-def extract_distinct_image(paths, min_distant=2, num_worker=4):
+def extract_distinct_image(paths, min_distant=2, num_worker=4, verbose=True):
     """Extract distinct image
 
     Parameters
@@ -62,13 +64,14 @@ def extract_distinct_image(paths, min_distant=2, num_worker=4):
         minimum distant of average hash of frame (http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html)
     num_worker: int
         number of worker
+    verbose: bool
+        True: progress bar
+        False: silent
 
     Returns
     -------
     list of paths of distinct image
     """
-    with Pool(num_worker) as p:
-        hashes = p.map(__get_average_hash, paths)
-        
+    hashes = pool_worker(__get_average_hash, paths, num_worker, verbose)
     distinct_indexs = __extract_distinct_hash_indexes(hashes, min_distant)
     return [paths[i] for i in distinct_indexs]

@@ -4,6 +4,8 @@ from subprocess import call
 from PIL import Image
 from send2trash import send2trash
 from multiprocessing import Pool
+from tqdm import tqdm
+from ailabtools.multiprocessing import pool_worker
 
 def __hashfile(path, blocksize = 65536):
     afile = open(path, 'rb')
@@ -17,15 +19,18 @@ def __hashfile(path, blocksize = 65536):
 
 def __change_namge(cur_name, new_name):
     call(['mv', cur_name, new_name])
-    print('change name file {} to {}'.format(cur_name, new_name))
+    log = 'change name file {} to {}'.format(cur_name, new_name)
+    return log
     
 def __adj_extension(path):
     real_ex = magic.from_file(path, mime=True).split('/')[1]
     cur_ex = path.split('.')[-1]
     if cur_ex != real_ex:
-        __change_namge(path, '{}.{}'.format(path, real_ex))
-        
-def adj_extension(paths, num_worker=4):
+        return __change_namge(path, '{}.{}'.format(path, real_ex))
+    else:
+        return ''
+
+def adj_extension(paths, num_worker=4, verbose=True):
     """Adjust extension of files
     wrong_name => wrong_name.true_extension
 
@@ -35,23 +40,29 @@ def adj_extension(paths, num_worker=4):
         list of path
     num_worker: int
         number of worker
+    verbose: bool
+        True: progress bar
+        False: silent
 
     Returns
     -------
-    None
+    logs: list of str
+        list name files adjusted extension and new name
     """
-    with Pool(num_worker) as p:
-        p.map(__adj_extension, paths)
+    logs = pool_worker(__adj_extension, paths, num_worker, verbose)
+    return [log for log in logs if log != '']
         
         
 def __rm_unreadable(path):
     try:
         Image.open(path)
+        return ''
     except:
         send2trash(path)
-        print('remove file: {}'.format(path))
+        log = 'remove file: {}'.format(path)
+        return log
         
-def rm_unreadable(paths, num_worker=4):
+def rm_unreadable(paths, num_worker=4, verbose=True):
     """Remove file witch PIL.Image faile to read
 
     Parameters
@@ -60,15 +71,19 @@ def rm_unreadable(paths, num_worker=4):
         list of path
     num_worker: int
         number of worker
+    verbose: bool
+        True: progress bar
+        False: silent
 
     Returns
     -------
-    None
+    logs: list of str
+        list name files removed
     """
-    with Pool(num_worker) as p:
-        p.map(__rm_unreadable, paths)
+    logs = pool_worker(__rm_unreadable, paths, num_worker, verbose)
+    return [log for log in logs if log != '']
         
-def rm_duplicate(paths, num_worker=4):
+def rm_duplicate(paths, num_worker=4, verbose=True):
     """Remove duplicate file
 
     Parameters
@@ -77,20 +92,24 @@ def rm_duplicate(paths, num_worker=4):
         list of path
     num_worker: int
         number of worker
+    verbose: bool
+        True: progress bar
+        False: silent
 
     Returns
     -------
-    None
+    logs: list of str
+        list name files removed
     """
-    
-    with Pool(num_worker) as p:
-        hashes = p.map(__hashfile, paths)
+    hashes = pool_worker(__hashfile, paths, num_worker, verbose)
         
     filted = {}
     remove_list = []
+    logs = []
     for i in range(len(hashes)):
         if hashes[i] not in filted:
             filted[hashes[i]] = paths[i]
         else:
             send2trash(paths[i])
-            print('remove file: {}'.format(paths[i]))
+            logs.append('remove file: {}'.format(paths[i]))
+    return logs
