@@ -5,6 +5,15 @@ def dark_theme_matplotlib():
     import matplotlib.pyplot as plt
     plt.style.use(['dark_background', {'figure.facecolor':'#002b36', 'axes.facecolor':'#002b36'}])
 
+def default_theme_matplotlib():
+    import matplotlib.pyplot as plt
+    plt.style.use(['seaborn'])
+    
+def default_theme_jupyter_lab():
+    from IPython.display import display, HTML
+    css = ''
+    display(HTML('<style type="text/css">{}</style>Customized changes loaded.'.format(css))) 
+    
 def dark_theme_jupyter_lab():
     from IPython.display import display, HTML
     css = '''/*-----------------------------------------------------------------------------

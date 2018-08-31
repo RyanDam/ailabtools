@@ -6,9 +6,37 @@ from random import shuffle
 import matplotlib.pyplot as plt
 
 from tqdm import tqdm
+from glob import glob
+
+def get_raw_data(path):
+    '''Get raw data pair from path
+    
+    Parameters
+    ----------
+    path : str
+        target path
+    
+    Returns
+    -------
+    tuple
+        data pair xs, ys
+    '''
+
+    paths = glob(os.path.join(path, '**/*.*'), recursive=True)
+    
+    data_dict = {}
+    for p in paths:
+        ppp = p.split('/')
+        cat = ppp[-2]
+        if cat in data_dict:
+            data_dict[cat].append(p)
+        else:
+            data_dict[cat] = [p]
+    
+    return convert_dict_to_pair(data_dict)
 
 def stat(arr):
-    '''Print statistic or given array
+    '''Print statistic of given array
     
     Parameters
     ----------
@@ -39,8 +67,8 @@ def get_weight_dict(xs, ys, multiply=10):
 
     _, stat_key, stat_num = statistic_data(xs, ys)
     maxx = np.max(stat_num)
-    stat_weights = (maxx/stat_num).astype(np.uint8)
-    stat_weights = stat_weights*alpha/np.sum(stat_weights)
+    stat_weights = maxx/stat_num
+    stat_weights = stat_weights*multiply/np.sum(stat_weights)
 
     weights_dict = {}
     for k, w in zip(stat_key, stat_weights):
@@ -67,7 +95,7 @@ def statistic_data(xs, ys, title=None):
     '''
 
     data_dic = {}
-    for y, p in zip(xs, ys):
+    for y, p in zip(ys, xs):
         if y in data_dic:
             data_dic[y] = data_dic[y] + [p]
         else:
@@ -80,9 +108,9 @@ def statistic_data(xs, ys, title=None):
         print(title, 'sum:', np.sum(nums))
         plt.bar(keys, nums)
         plt.show()
-    
-    print(nums)
-    stat(nums)
+
+        print(nums)
+        stat(nums)
     
     return data_dic, keys, nums
 
@@ -215,7 +243,7 @@ def split_data(xs, ys, alpha=0.9, maxx=None):
     alpha : float, optional
         Split ratio if alpha < 1.0, otherwise is the number of item for each classes in first chunk (the default is 0.9, which means first chunk will contain 90% data of given xs, second chunk contain the rest)
     maxx : int, optional
-        maximum number of item for each first chunk, maxx will not makes any affect if alpha > 1 (the default is None, which means no affect)
+        Maximum number of item for each first chunk, maxx will not makes any affect if alpha > 1 (the default is None, which means no affect)
     
     Returns
     -------
@@ -225,7 +253,9 @@ def split_data(xs, ys, alpha=0.9, maxx=None):
 
     data_dic, _, _ = statistic_data(xs, ys)
     
-    assert alpha > 0 and maxx > 0, 'alpha and maxx must be greater than 0'
+    assert alpha > 0, 'alpha must be greater than 0'
+    if maxx is not None:
+        assert maxx > 0, 'maxx must be greater than 0'
 
     if alpha < 1.0:
         def get_sample(arr, alpha=0.9, maxx=None):
