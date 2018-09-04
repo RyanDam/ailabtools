@@ -1,4 +1,7 @@
 .ipynb_checkpoints
 .ipynb_checkpoints/*
 ./examples/.ipynb_checkpoints/
+
 examples/.ipynb_checkpoints/train_with_pairgenerator-checkpoint.ipynb
+ailabtools/keras/.ipynb_checkpoints/pairgenerator-checkpoint.py
+examples/.ipynb_checkpoints/statistic_module-checkpoint.ipynb
