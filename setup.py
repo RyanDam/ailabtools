@@ -8,11 +8,17 @@ required_packages = ['numpy', 'tensorflow', 'matplotlib', 'scipy', 'scikit-learn
                      'tqdm',
                      ]
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='ailabtools',
     packages=['ailabtools', 'ailabtools.keras'],
-    version='0.1rc2',
-    description='Common tools for Zalo AI Lab',
+    version='0.1rc3',
+    author="Zalo AILab",
+    description='Common tools for Zalo AILab',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url='http://lab.zalo.ai',
     include_package_data=True,
     install_requires=required_packages,
