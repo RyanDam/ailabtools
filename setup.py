@@ -14,12 +14,17 @@ with open("README.md", "r") as fh:
 setup(
     name='ailabtools',
     packages=['ailabtools', 'ailabtools.keras'],
-    version='0.1rc3',
+    version='0.0.3',
     author="Zalo AILab",
     description='Common tools for Zalo AILab',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='http://lab.zalo.ai',
+    url='https://lab.zalo.ai',
     include_package_data=True,
     install_requires=required_packages,
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
 )

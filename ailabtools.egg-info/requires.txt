@@ -2,7 +2,10 @@ numpy
 tensorflow
 matplotlib
 scipy
-scipy
 scikit-learn
 scikit-image
 keras
+imagehash
+send2trash
+python-magic
+tqdm
