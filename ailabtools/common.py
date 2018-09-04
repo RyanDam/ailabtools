@@ -1,20 +1,20 @@
 def check():
     print("AILab Server Check OK")
 
-def dark_theme_matplotlib():
+def plt_dark():
     import matplotlib.pyplot as plt
     plt.style.use(['dark_background', {'figure.facecolor':'#002b36', 'axes.facecolor':'#002b36'}])
 
-def default_theme_matplotlib():
+def plt_light():
     import matplotlib.pyplot as plt
     plt.style.use(['seaborn'])
     
-def default_theme_jupyter_lab():
+def jpl_light():
     from IPython.display import display, HTML
     css = ''
     display(HTML('<style type="text/css">{}</style>Customized changes loaded.'.format(css))) 
     
-def dark_theme_jupyter_lab():
+def jpl_dark():
     from IPython.display import display, HTML
     css = '''/*-----------------------------------------------------------------------------
             | Copyright (c) Jupyter Development Team.
