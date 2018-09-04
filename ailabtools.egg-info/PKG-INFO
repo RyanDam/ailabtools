@@ -1,15 +1,29 @@
 Metadata-Version: 2.1
 Name: ailabtools
-Version: 0.0.2
+Version: 0.0.3
 Summary: Common tools for Zalo AILab
-Home-page: http://lab.zalo.ai
+Home-page: https://lab.zalo.ai
 Author: Zalo AILab
 License: UNKNOWN
 Description: # Zalo AI Lab tools
         
+        [![PyPI version fury.io](https://badge.fury.io/py/ailabtools.svg)](https://pypi.python.org/pypi/ailabtools/)
+        
+        [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+        
+        [![PyPI pyversions](https://img.shields.io/pypi/pyversions/ailabtools.svg)](https://pypi.python.org/pypi/ailabtools/)
+        
         Pip package tools for Deep learning task
         
         ## Installation
+        
+        ```
+        pip install ailabtools
+        ```
+        
+        ## Develop instruction
+        
+        ### Installation for developing
         
         1. Clone project to folder `ailabtools`
         
@@ -18,7 +32,7 @@ Description: # Zalo AI Lab tools
             ```
             pip install .
             ```
-            
+        
             for editable package (for development process), run:
         
             ```
@@ -47,8 +61,6 @@ Description: # Zalo AI Lab tools
             pip show ailabtools
             ```
         
-        ## Develop instruction
-        
         ### Contribution process
         
         - Deployment branch: `master`.
@@ -71,13 +83,9 @@ Description: # Zalo AI Lab tools
         
         Add module in `ailabtools` folder.
         
-        ## Module
+        ## Documents
         
-        ### `common`
-        
-        1. `check`
-        
-            check package install status
+        Check wiki pages
         
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
