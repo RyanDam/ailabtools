@@ -1,8 +1,22 @@
 # Zalo AI Lab tools
 
+[![PyPI version fury.io](https://badge.fury.io/py/ailabtools.svg)](https://pypi.python.org/pypi/ailabtools/)
+
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/ailabtools.svg)](https://pypi.python.org/pypi/ailabtools/)
+
 Pip package tools for Deep learning task
 
 ## Installation
+
+```
+pip install ailabtools
+```
+
+## Develop instruction
+
+### Installation for developing
 
 1. Clone project to folder `ailabtools`
 
@@ -11,7 +25,7 @@ Pip package tools for Deep learning task
     ```
     pip install .
     ```
-    
+
     for editable package (for development process), run:
 
     ```
@@ -40,8 +54,6 @@ Pip package tools for Deep learning task
     pip show ailabtools
     ```
 
-## Develop instruction
-
 ### Contribution process
 
 - Deployment branch: `master`.
@@ -64,10 +76,6 @@ Checkout `setup.py` for package information.
 
 Add module in `ailabtools` folder.
 
-## Module
+## Documents
 
-### `common`
-
-1. `check`
-
-    check package install status
+Check wiki pages
