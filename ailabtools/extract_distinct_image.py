@@ -2,8 +2,7 @@ import os
 import imageio
 import imagehash
 from PIL import Image
-from multiprocessing import Pool
-from ailabtools.multiprocessing import pool_worker
+from ailab_multiprocessing import pool_worker
 
 def __get_average_hash(path):
     im = Image.open(path)

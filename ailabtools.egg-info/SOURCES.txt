@@ -6,6 +6,7 @@ ailabtools/extract_distinct_image.py
 ailabtools/image_file_processer.py
 ailabtools/multiprocess.py
 ailabtools/statistic.py
+ailabtools/zaco.py
 ailabtools.egg-info/PKG-INFO
 ailabtools.egg-info/SOURCES.txt
 ailabtools.egg-info/dependency_links.txt
