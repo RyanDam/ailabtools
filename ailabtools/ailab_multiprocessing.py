@@ -7,14 +7,14 @@ def pool_worker(target, inputs, num_worker=None, verbose=True):
     Parameters
     ----------
     target : func
-    function to excute multi process
+        function to excute multi process
     inputs: list
-    list of argument of target function
+        list of argument of target function
     num_worker: int
     number of worker
     verbose: bool
-    True: progress bar
-    False: silent
+        True: progress bar
+        False: silent
 
     Returns
     -------
