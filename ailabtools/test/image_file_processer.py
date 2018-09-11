@@ -3,7 +3,6 @@ import hashlib
 from subprocess import call
 from PIL import Image
 from send2trash import send2trash
-from tqdm import tqdm
 from ailab_multiprocessing import pool_worker
 
 def __hashfile(path, blocksize = 65536):
