@@ -30,6 +30,7 @@ class LabelTask:
         init label task data
         '''
         self.super_item = {}
+        
         if not annotation_file == None:
             print('loading annotations into memory...')
             tic = time.time()
@@ -41,6 +42,8 @@ class LabelTask:
             
         if num_worker == None:
             self.num_worker = multiprocessing.cpu_count()
+        else:
+            self.num_worker = num_worker
             
         self.createIndex()
         print('DONE loading ', len(self.data_items), ' items')
@@ -162,7 +165,7 @@ class LabelTask:
     
     def get_path_items(self, item_ids):
         with Pool(self.num_worker) as p:
-            res = p.map(self.get_path, item_ids)
+            res = p.map(self.get_path_by_item, item_ids)
         return res
     
     def get_class(self, item_id):
