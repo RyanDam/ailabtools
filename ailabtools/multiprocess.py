@@ -2,7 +2,7 @@ from multiprocessing import Pool
 from tqdm import tqdm
 
 def pool_worker(target, inputs, num_worker=4, verbose=True):
-	"""Run target function in multi-process
+    """Run target function in multi-process
 
     Parameters
     ----------

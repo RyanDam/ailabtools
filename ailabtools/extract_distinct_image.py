@@ -5,9 +5,11 @@ from PIL import Image
 from multiprocessing import Pool
 from ailabtools.multiprocessing import pool_worker
 
+
 def __get_average_hash(path):
     im = Image.open(path)
     return imagehash.average_hash(im)
+
 
 def __extract_distinct_hash_indexes(hashes, min_distant=2):
     distinct_indexs = [0]
@@ -18,6 +20,7 @@ def __extract_distinct_hash_indexes(hashes, min_distant=2):
         else:
             distinct_indexs.append(i)
     return distinct_indexs
+
 
 def extract_distinct_video(video_path, dest_dir, size=None, fps=1, min_distant=2, num_worker=4, verbose=True):
     """Extract distinct frame of video and save to dest_dir
@@ -52,6 +55,7 @@ def extract_distinct_video(video_path, dest_dir, size=None, fps=1, min_distant=2
     
     for index in distinct_indexs:
         Image.fromarray(video.get_data(index)).save(os.path.join(dest_dir, '{:05}.png'.format(index)))
+
 
 def extract_distinct_image(paths, min_distant=2, num_worker=4, verbose=True):
     """Extract distinct image
