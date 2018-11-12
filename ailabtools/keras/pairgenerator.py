@@ -1,6 +1,6 @@
 import os
 import keras
-if keras.__version__ == '2.2.4':
+if keras.__version__.startswith('2.2.') and int(keras.__version__[-1]) >= 4:
     import keras.preprocessing
     import keras.preprocessing.image as kimage
     from keras.preprocessing.image import ImageDataGenerator, Iterator, load_img, img_to_array
