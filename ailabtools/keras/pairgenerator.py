@@ -1,8 +1,8 @@
 import os
 import keras
-import keras_preprocessing
-import keras_preprocessing.image as kimage
-from keras_preprocessing.image import ImageDataGenerator, Iterator, load_img, img_to_array
+import keras.preprocessing
+import keras.preprocessing.image as kimage
+from keras.preprocessing.image import ImageDataGenerator, Iterator, load_img, img_to_array
 import numpy as np
     
 def load_img_func(fname, target_size, data_format):
