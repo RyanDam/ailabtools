@@ -4,7 +4,7 @@ from subprocess import call
 from PIL import Image
 from send2trash import send2trash
 from tqdm import tqdm
-from ailab_multiprocessing import pool_worker
+from .ailab_multiprocessing import pool_worker
 
 def __hashfile(path, blocksize = 65536):
     afile = open(path, 'rb')
@@ -29,7 +29,7 @@ def __adj_extension(path):
     else:
         return ''
 
-def adj_extension(paths, num_worker=4, verbose=True):
+def adj_extension(paths, num_worker=None, verbose=True):
     """Adjust extension of files
     wrong_name => wrong_name.true_extension
 
@@ -61,7 +61,7 @@ def __rm_unreadable(path):
         log = 'remove file: {}'.format(path)
         return log
         
-def rm_unreadable(paths, num_worker=4, verbose=True):
+def rm_unreadable(paths, num_worker=None, verbose=True):
     """Remove file witch PIL.Image faile to read
 
     Parameters
@@ -82,7 +82,7 @@ def rm_unreadable(paths, num_worker=4, verbose=True):
     logs = pool_worker(__rm_unreadable, paths, num_worker, verbose)
     return [log for log in logs if log != '']
         
-def rm_duplicate(paths, num_worker=4, verbose=True):
+def rm_duplicate(paths, num_worker=None, verbose=True):
     """Remove duplicate file
 
     Parameters
@@ -110,5 +110,5 @@ def rm_duplicate(paths, num_worker=4, verbose=True):
             filted[hashes[i]] = paths[i]
         else:
             send2trash(paths[i])
-            logs.append('remove file: {}'.format(paths[i]))
+            logs.append('remove file: {} duplicate with: {}'.format(paths[i], filted[hashes[i]]))
     return logs

@@ -7,7 +7,7 @@ from send2trash import send2trash
 from tqdm import tqdm
 import numpy as np
 from collections import Counter
-from ailabtools.ailab_multiprocessing import pool_worker
+from .ailab_multiprocessing import pool_worker
 
 import warnings
 warnings.simplefilter("ignore")

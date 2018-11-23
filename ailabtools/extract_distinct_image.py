@@ -2,11 +2,13 @@ import os
 import imageio
 import imagehash
 from PIL import Image
-from ailabtools.ailab_multiprocessing import pool_worker
+from .ailab_multiprocessing import pool_worker
+
 
 def __get_average_hash(path):
     im = Image.open(path)
     return imagehash.average_hash(im)
+
 
 def __extract_distinct_hash_indexes(hashes, min_distant=2):
     distinct_indexs = [0]
