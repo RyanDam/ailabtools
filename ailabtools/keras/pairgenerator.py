@@ -303,7 +303,7 @@ class PairDataGenerator(ImageDataGenerator):
         """
         return PairIterator(
             X, Y, self,
-            load_func=None, need_augmentation=None, batch_func=None,
+            load_func=load_func, need_augmentation=need_augmentation, batch_func=batch_func,
             target_size=target_size, color_mode=color_mode,
             class_mode=class_mode,
             data_format=self.data_format,
