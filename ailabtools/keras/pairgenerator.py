@@ -180,7 +180,9 @@ class PairIterator(Iterator):
             if self.need_augmentation:
                 params = self.image_data_generator.get_random_transform(x.shape)
                 x = self.image_data_generator.apply_transform(x, params)
-                x = self.image_data_generator.standardize(x)
+                
+            # apply normalization
+            x = self.image_data_generator.standardize(x)
                 
             batch_x[i] = x
         # optionally save augmented images to disk for debugging purposes
