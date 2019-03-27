@@ -46,6 +46,8 @@ class LabelTask:
             self.num_worker = num_worker
             
         self.createIndex()
+        self.num_labeled_data = len(self.data_items)
+        self.num_all_data = np.sum([self.datasets[key]['data_num'] for key in self.datasets])
         print('DONE loading ', len(self.data_items), ' items')
 
     def createIndex(self):
