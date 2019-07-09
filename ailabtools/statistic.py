@@ -35,7 +35,7 @@ def get_raw_data(path):
     
     return convert_dict_to_pair(data_dict)
 
-def stat(arr):
+def stat(arr, name=''):
     '''Print statistic of given array
     
     Parameters
@@ -45,7 +45,7 @@ def stat(arr):
     
     '''
     arr = np.array(arr)
-    print((len(arr), 'min:', np.min(arr), 'max:', np.max(arr), 'std:', np.std(arr), 'mean:', np.mean(arr), 'median:', np.median(arr)))
+    print((name, arr.shape, 'min:', np.min(arr), 'max:', np.max(arr), 'std:', np.std(arr), 'mean:', np.mean(arr), 'median:', np.median(arr)))
 
 def get_weight_dict(xs, ys, multiply=10):
     '''Automatically generate dictionary of weight for each class
