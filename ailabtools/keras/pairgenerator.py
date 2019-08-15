@@ -1,18 +1,24 @@
 import os
-import keras
-if keras.__version__.startswith('2.2.') and int(keras.__version__[4]) >= 4:
-    import keras.preprocessing
-    import keras.preprocessing.image as kimage
-    from keras.preprocessing.image import ImageDataGenerator, Iterator, load_img, img_to_array
-else:
-    import keras_preprocessing
-    import keras_preprocessing.image as kimage
-    from keras_preprocessing.image import ImageDataGenerator, Iterator, load_img, img_to_array
 import numpy as np
+import keras
+import keras.preprocessing
+import keras.preprocessing.image as kimage
+from keras.preprocessing.image import ImageDataGenerator, Iterator, load_img, img_to_array
     
+from PIL import Image
+import requests
+from io import BytesIO
+
 def load_img_func(fname, target_size, data_format):
-    img = load_img(fname,
-                   target_size=target_size)
+    if fname.startswith('https://supplier.lab.zalo.ai/routing'):
+        # from labeling server
+        response = requests.get(fname)
+        img = Image.open(BytesIO(response.content)).resize(target_size)
+        img = np.array(img)
+    else:
+        # from local
+        img = load_img(fname,
+                    target_size=target_size)
 
     x = img_to_array(img, data_format=data_format)
 

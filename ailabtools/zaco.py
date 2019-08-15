@@ -118,10 +118,13 @@ class LabelTask:
         pass
     
     
-    def get_item_ids(self, dataset_ids=[], class_ids=[]):
+    def get_item_ids(self, dataset_ids=[], class_ids=[], rating=-1):
         '''
         return item ids belong to (dataset_ids AND class_ids)
         '''
+        def intersection(lst1, lst2): 
+            return set(lst1).intersection(lst2) 
+
         class_ids = class_ids if _isArrayLike(class_ids) else [class_ids]
         dataset_ids = dataset_ids if _isArrayLike(dataset_ids) else [dataset_ids]
 
@@ -131,16 +134,16 @@ class LabelTask:
         for item_id in item_ids:
             
             get_flag = True
+
             if dataset_ids:
                 if self.super_item[item_id]['dataset_id'] not in dataset_ids:
                     continue
             
-            for class_id in class_ids:
-                all_cls = [ann['class_id'] for ann in self.super_item[item_id]['annotations']]
-                if not (class_id in all_cls):
+            if class_ids:
+                item_classes = [ann['class_id'] for ann in self.super_item[item_id]['annotations']]
+                if len(intersection(item_classes, class_ids)) == 0:
                     get_flag = False
-                    break
-            
+
             if get_flag:
                 filted_ids.append(item_id)
                     
