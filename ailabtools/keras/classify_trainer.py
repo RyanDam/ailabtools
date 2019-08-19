@@ -99,7 +99,7 @@ def train_zaco_classifier(anno_path, keep_classes=[], split=0.9, **kwargs):
 
 def parse_arg_param(**kwargs):
     default_aug_param = {
-        'rotation_range': 10
+        'rotation_range': 10,
         'width_shift_range': 0.1, 
         'height_shift_range': 0.1, 
         'brightness_range': [0.7, 1.3], 
@@ -165,7 +165,7 @@ def train_classifier(train_set,
     if need_aug_data:
         aug_params = parse_arg_param(**kwargs)
         print('\tAugument param:')
-        for k, v in aug_params:
+        for k, v in aug_params.items():
             print('\t\t{}: {}'.format(k, v))
     else:
         aug_params = {}
@@ -174,7 +174,7 @@ def train_classifier(train_set,
     if val_set is not None:
         gen_val = PairDataGenerator(preprocessing_function=preprocess_image)
 
-    train_iter = gen.flow_from_pair(train_x, train_y, batch_size=batch_size, target_size=input_shape[:2])
+    train_iter = gen.flow_from_pair(train_x, train_y, batch_size=batch_size, target_size=input_shape[:2], need_augmentation=need_aug_data)
     print('\tClass maping...')
     class_map = train_iter.class_indices
     for k, v in class_map.items():
@@ -184,7 +184,7 @@ def train_classifier(train_set,
     val_step = 0
     if val_set is not None:
         val_x, val_y = val_set
-        val_iter = gen_val.flow_from_pair(val_x, val_y, batch_size=batch_size, target_size=input_shape[:2])
+        val_iter = gen_val.flow_from_pair(val_x, val_y, batch_size=batch_size, target_size=input_shape[:2], need_augmentation=False)
         val_step = len(val_x)//batch_size+1
     print('Constructing generator... DONE')
 
