@@ -97,6 +97,24 @@ def train_zaco_classifier(anno_path, keep_classes=[], split=0.9, **kwargs):
 
     return train_classifier((train_x, train_y), val_set=(val_x, val_y), **kwargs)
 
+def parse_arg_param(**kwargs):
+    default_aug_param = {
+        'rotation_range': 10
+        'width_shift_range': 0.1, 
+        'height_shift_range': 0.1, 
+        'brightness_range': [0.7, 1.3], 
+        'shear_range': 0.0, 
+        'zoom_range': [0.8, 1.2], 
+        'channel_shift_range': 0.2, 
+        'horizontal_flip': True, 
+        'vertical_flip': True,
+    }
+    setable_param = list(default_aug_param.keys())
+    for k in setable_param:
+        if k in kwargs:
+            default_aug_param[k] = kwargs[k]
+    return default_aug_param
+
 def train_classifier(train_set, 
     model=None, 
     num_class=2,
@@ -113,7 +131,9 @@ def train_classifier(train_set,
     epoch=10, 
     batch_size=16,
     auto_construct_weight=True,
-    num_worker=4
+    num_worker=4,
+    need_aug_data=True,
+    **kwargs
 ):
     train_x, train_y = train_set
 
@@ -142,15 +162,14 @@ def train_classifier(train_set,
     print('Compiling model... DONE')
 
     print('Constructing generator...')
-    gen = PairDataGenerator(width_shift_range=0.1, 
-                        height_shift_range=0.1, 
-                        brightness_range=[0.7, 1.3], 
-                        shear_range=0.0, 
-                        zoom_range=[0.8, 1.2], 
-                        channel_shift_range=0.2, 
-                        horizontal_flip=True, 
-                        vertical_flip=True,
-                        preprocessing_function=preprocess_image)
+    if need_aug_data:
+        aug_params = parse_arg_param(**kwargs)
+        print('\tAugument param:')
+        for k, v in aug_params:
+            print('\t\t{}: {}'.format(k, v))
+    else:
+        aug_params = {}
+    gen = PairDataGenerator(preprocessing_function=preprocess_image, **aug_params)
     gen_val = None
     if val_set is not None:
         gen_val = PairDataGenerator(preprocessing_function=preprocess_image)
