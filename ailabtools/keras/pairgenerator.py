@@ -13,12 +13,12 @@ def load_img_func(fname, target_size, data_format):
     if fname.startswith('https://supplier.lab.zalo.ai/routing'):
         # from labeling server
         response = requests.get(fname)
-        img = Image.open(BytesIO(response.content)).resize(target_size)
+        img = Image.open(BytesIO(response.content)).resize(target_size).convert('RGB')
         img = np.array(img)
     else:
         # from local
         img = load_img(fname,
-                    target_size=target_size)
+                    target_size=target_size, color_mode='rgb')
 
     x = img_to_array(img, data_format=data_format)
 
