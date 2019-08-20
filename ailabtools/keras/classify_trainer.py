@@ -53,27 +53,32 @@ def build_callbacks(model_name, base_log='.', base_lr=0.001):
     
     return callbacks
 
-def _convert_data(db, url_api='https://supplier.lab.zalo.ai/routing'):
+def _url_constructor(base_path, name_path, url_api='https://supplier.lab.zalo.ai/routing'):
+    return os.path.join(url_api, base_path, name_path)
+
+def _convert_data(db, url_constructor=None):
+    if url_constructor == None:
+        url_constructor = _url_constructor
     data = []
     for d in db:
         anno = d['annotations'][0]
         if anno['review']['rating'] >= 0:
-            url = os.path.join(url_api, d['path']['base_path'], d['path']['server_path'])
+            url = url_constructor(d['path']['base_path'], d['path']['server_path'])
             data.append([url, anno['class_id']])
     return data
 
-def zaco_parser(annotation_path, classes=[]):
+def zaco_parser(annotation_path, classes=[], url_constructor=None):
     task = LabelTask(annotation_path)
     all_allocated_item = task.get_item_ids(class_ids=classes)
     all_allocated_item = task.get_items(all_allocated_item)
-    dataset = _convert_data(all_allocated_item)
+    dataset = _convert_data(all_allocated_item, url_constructor=url_constructor)
     random.shuffle(dataset)
     return dataset, task.classes
 
-def train_zaco_classifier(anno_path, keep_classes=[], split=0.9, **kwargs):
+def train_zaco_classifier(anno_path, keep_classes=[], split=0.9, url_constructor=None, **kwargs):
 
     print('Parsing ZACO format...')
-    dataset, class_map = zaco_parser(anno_path, classes=keep_classes)
+    dataset, class_map = zaco_parser(anno_path, classes=keep_classes, url_constructor=url_constructor)
     print('\tZACO classes:')
     for cls in keep_classes:
         print('\t\t{}: {}'.format(cls, class_map[cls]['name']))
