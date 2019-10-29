@@ -168,7 +168,7 @@ def check_duplicate_image(new_paths, old_paths=None, threshold=5, num_threads=No
     for idx in dup_internal_dict:
         dup_new_dict[new_paths[idx]] = new_paths[dup_internal_dict[idx]]
     if old_paths is None:
-        return dup_path_dict
+        return dup_new_dict
     
     remain_ids = sorted(set(np.arange((len(new_hashes)))) - set(dup_internal_dict))
     new_hashes = np.array(new_hashes)[remain_ids]
