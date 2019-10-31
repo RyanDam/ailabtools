@@ -1,5 +1,5 @@
-# from .image_file_processer import rm_unreadable
-# from .image_file_processer import rm_duplicate
+#from .image_file_processer import rm_unreadable
+#from .image_file_processer import rm_duplicate
 
 #from .ailab_multiprocessing import pool_worker
 

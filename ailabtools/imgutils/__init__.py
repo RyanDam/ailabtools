@@ -1,1 +1,1 @@
-from .check_duplicate_image import check_duplicate_image
+from .check_duplicate_image import check_dup_perception

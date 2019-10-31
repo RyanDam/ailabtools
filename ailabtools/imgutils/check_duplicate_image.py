@@ -87,9 +87,9 @@ def check_path_with_report(path_infos):
     return problem_dict
 
 #CHECK DUPLICATE FUNCTIONS
-def check_dup_internal(new_hashes, ref_names, threshold, num_threads):    
+def check_dup_internal(new_hashes, ref_names, threshold, num_threads, k):    
     index = build_index(new_hashes)
-    neighbours = index.knnQueryBatch(new_hashes, k=100, num_threads=num_threads)
+    neighbours = index.knnQueryBatch(new_hashes, k=k, num_threads=num_threads)
     edges = set()
     for i, item in enumerate(neighbours):
         ids, distances = item
@@ -111,13 +111,13 @@ def check_dup_internal(new_hashes, ref_names, threshold, num_threads):
 
     return dup_dict
 
-def check_dup_internal_loop(new_hashes, threshold=5, num_threads=None):
+def check_dup_internal_loop(new_hashes, threshold, num_threads, k):
     run_hashes = new_hashes.copy()
     remain_indexes = np.arange(len(run_hashes))
     
     dup_dicts = []
     while True:
-        dup_dict = check_dup_internal(run_hashes, remain_indexes, threshold, num_threads)
+        dup_dict = check_dup_internal(run_hashes, remain_indexes, threshold, num_threads, k)
         if dup_dict == {}:
             break
         dup_dicts.append(dup_dict)
@@ -137,7 +137,27 @@ def check_dup_internal_loop(new_hashes, threshold=5, num_threads=None):
 
 
 #MAIN FUNCTION
-def check_duplicate_image(new_paths, old_paths=None, threshold=5, num_threads=None, k=100):
+def check_dup_perception(new_paths, old_paths=None, threshold=5, num_threads=None, k=100):
+    """Extract distinct image
+
+    Parameters
+    ----------
+    new_paths : list
+        path of images to check duplicate internal
+    old_paths: list
+        path of images to check new_paths duplicated or not
+    threshold: int ~ [0, 64]
+        minimum distant of average hash of frame (http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html)
+    num_threads: int or None
+        number of worker, if None use all CPU
+    k: int
+        number of nearest neighbor to check, should be 100
+
+    Returns
+    -------
+    list of paths of distinct image
+    """
+
     if num_threads is None:
         num_threads = cpu_count()
     path_infos = []
@@ -160,7 +180,7 @@ def check_duplicate_image(new_paths, old_paths=None, threshold=5, num_threads=No
     new_hashes = pool_worker(get_hash, new_paths)
     print("DONE")
     print("CHECK DUP INTERNAL")
-    dup_internal_dict = check_dup_internal_loop(new_hashes, threshold=threshold, num_threads=num_threads)
+    dup_internal_dict = check_dup_internal_loop(new_hashes, threshold, num_threads, k)
     print("DONE")
     dup_new_dict = {}
     for idx in dup_internal_dict:

@@ -5,7 +5,6 @@ import multiprocessing
 from multiprocessing import Process, Queue, Lock, Value
 from glob import glob
 import numpy as np
-import pandas as pd
 from multiprocessing import Process, Queue, Value
 import traceback
 from PIL import Image
