@@ -20,8 +20,102 @@ class mass_detector:
                  num_producer=5, 
                  max_queue_batch_len=10, 
                  num_verbose=1000, 
-                 is_tensorflow=False, 
                  show_warning=True):
+        
+        """Creat pipeline to use multiple model to predict inputs data
+
+        Parameters
+        ----------
+        input_data: list
+            list of input data to process
+        gpu_schedule: list
+            list of GPUs name for each model
+        batch_size: int
+            batch_size for model predict
+        num_producer: int
+            number of producer to process input data before feed to model
+        max_queue_batch_len: int
+            maximum queue len of batch between producers and consumers
+        num_verbose: int
+            show process after process num_verbose input
+        show_warning: bool
+            show warning if consumer is faster than producer
+
+        Returns
+        -------
+        Class to inherit for specific demand
+        To use must implement these functions:
+        
+        func get_item:
+            Parameters
+            ----------
+            index: index of item in input_data
+            Returns
+            -------
+            processed item
+        
+        func batch_from_items:
+            Parameters
+            ----------
+            items: list of items get from function get_item
+            Returns
+            -------
+            batch created by items to feed for model
+
+        func load_model:
+            Parameters
+            ----------
+            This function have no input
+            Use this function to load model and config GPU usage
+            Returns
+            -------
+            model to predict batch return by batch_from_items
+
+        func predict:
+            Parameters
+            ----------
+            model: output of load_model function
+            batch: output of batch_from_items function
+            Returns
+            -------
+            prediction of model to batch
+
+        func save_prediction:
+            Parameters
+            ----------
+            indexs: list of index
+            predictions: list of predictions corresponding to indexes
+            Use this function to save result
+            Returns
+            -------
+            This function have no output
+            
+        Example
+        class example_mass_detector(mass_detector):
+            def get_item(self, index):
+                item = self.input_data[index]
+                item = preprocess(item)
+                return img
+
+            def batch_from_items(self, items):
+                return np.array(items)
+
+            def load_model(self):
+                import tensorflow as tf
+                from keras.backend.tensorflow_backend import set_session
+                config = tf.ConfigProto()
+                config.gpu_options.per_process_gpu_memory_fraction = 0.4
+                set_session(tf.Session(config=config))
+                model_path = "path_to_model"
+                return load(model_path)
+
+            def predict(self, model, batch):
+                return model.predict(batch)
+
+            def save_prediction(self, indexs, predictions):
+                np.save("./save_dir/save_time_{}.npy".format(time.time()), {"indexes": indexs, "predictions": predictions})        
+        """
+        
         self.input_data = input_data
         self.num_input = len(self.input_data)
         self.batch_size = batch_size
@@ -41,9 +135,7 @@ class mass_detector:
         self.save_queue = Queue(self.max_queue_batch_len)
         
         self.num_verbose = num_verbose
-        self.is_tensorflow = is_tensorflow
         self.show_warning = show_warning
-        self.last_show_time = time.time()
     #====================================================
     def produce(self):
         while True:
@@ -105,20 +197,9 @@ class mass_detector:
     
     
     #====================================================
-    def consum(self, gpu_info):
-        gpu_index, capacity = gpu_info
+    def consum(self, gpu_index):
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = gpu_index
-        
-        if self.is_tensorflow:
-            import tensorflow as tf
-            from keras.backend.tensorflow_backend import set_session
-            config = tf.ConfigProto()
-            if capacity == 'growth':
-                config.gpu_options.allow_growth = True
-            else:
-                config.gpu_options.per_process_gpu_memory_fraction = capacity
-            set_session(tf.Session(config=config))
         print('start load model on GPU: {}'.format(gpu_index))
         model = self.load_model()
         print('load done')

@@ -7,13 +7,11 @@ import numpy as np
 
 import nmslib
 import imagehash
-from .ailab_multiprocessing import pool_worker
+from ailabtools.ailab_multiprocessing import pool_worker
 
 from PIL import Image
-import warnings
-warnings.simplefilter("ignore")
-from PIL import ImageFile
-ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+# __all__ = ['get_connected_component', 'baz']
 
 #SUPPORT FUNCTIONS
 def get_hash(path):
