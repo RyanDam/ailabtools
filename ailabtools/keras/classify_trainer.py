@@ -9,8 +9,10 @@ import glob
 import random
 
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
-from keras.applications import mobilenet_v2
-
+try:
+    from keras.applications import mobilenet_v2
+except:
+    from keras_applications import mobilenet_v2
 from ailabtools.zaco import LabelTask
 from ailabtools.keras.callbacks import TrainValTensorBoard
 from ailabtools.keras.pairgenerator import PairDataGenerator
@@ -138,6 +140,7 @@ def train_classifier(train_set,
     auto_construct_weight=True,
     num_worker=4,
     need_aug_data=True,
+    mnet_alpha=1.0,
     **kwargs
 ):
     train_x, train_y = train_set
@@ -147,7 +150,7 @@ def train_classifier(train_set,
     input = keras.layers.Input(input_shape)
     if model == None:
         print('\tNo specified model, using MobilenetV2 1.0 as default')
-        backbone = mobilenet_v2.MobileNetV2(input_shape=input_shape, alpha=1.0, include_top=False, pooling=None)
+        backbone = mobilenet_v2.MobileNetV2(input_shape=input_shape, alpha=mnet_alpha, include_top=False, pooling=None)
         backbone_x = backbone(input)
         x = keras.layers.GlobalMaxPooling2D()(backbone_x)
         if pre_channel > 0:
