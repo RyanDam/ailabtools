@@ -4,6 +4,7 @@ from matplotlib.figure import Figure
 import numpy as np
 import math
 from PIL import Image
+import os
 
 def show_multi_image(imgs):
     nImgs = len(imgs)
@@ -78,4 +79,4 @@ def build_clustering(path, features, imgs=None, img_size=92):
         # Saves a config file that TensorBoard will read during startup.
         projector.visualize_embeddings(tf.summary.FileWriter(path), config)
 
-    print("tensorboard --logdir={}".format(path))
+    print("tensorboard --logdir={}".format(os.path.abspath(path)))
