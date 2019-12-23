@@ -2,7 +2,7 @@ from multiprocessing import Pool, cpu_count
 from multiprocessing.pool import ThreadPool
 from tqdm import tqdm
 
-def pool_worker(target, inputs, pool_type = 'process', num_worker=None, verbose=True):
+def pool_worker(target, inputs, use_thread = False, num_worker=None, verbose=True):
     """Run target function in multi-process
 
     Parameters
@@ -12,9 +12,8 @@ def pool_worker(target, inputs, pool_type = 'process', num_worker=None, verbose=
     inputs: list
         list of argument of target function
     num_worker: int
-    pool_type: str
-        valid value: ['process', 'thread']
-        type of pool worker
+    use_thread: bool
+        default use pool
     number of worker
     verbose: bool
         True: progress bar
@@ -24,12 +23,10 @@ def pool_worker(target, inputs, pool_type = 'process', num_worker=None, verbose=
     -------
     list of output of func
     """
-    if pool_type == "process":
-        pool_use = Pool
-    elif pool_type == "thread":
+    if use_thread:
         pool_use = ThreadPool
     else:
-        raise("pool_type varibile only accept value 'process' or 'thread'")
+        pool_use = Pool
     
     if num_worker is None:
         num_worker = cpu_count()
