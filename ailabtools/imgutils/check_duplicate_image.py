@@ -8,7 +8,7 @@ import numpy as np
 import nmslib
 import imagehash
 from ailabtools.ailab_multiprocessing import pool_worker
-
+import networkx
 from PIL import Image
 
 # __all__ = ['get_connected_component', 'baz']
@@ -100,7 +100,11 @@ def check_dup_internal(new_hashes, ref_names, threshold, num_threads, k):
             else:
                 break
                 
-    connected_components = get_connected_component(edges)
+    G = nx.Graph()
+    G.add_nodes_from(range(len(new_hashes)))
+    for edge in edges:
+        G.add_edge(*edge)
+    connected_components = nx.connected_components(G)
     
     dup_dict = {}
     for connected_component in connected_components:
