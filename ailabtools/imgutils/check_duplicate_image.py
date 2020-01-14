@@ -8,7 +8,7 @@ import numpy as np
 import nmslib
 import imagehash
 from ailabtools.ailab_multiprocessing import pool_worker
-import networkx
+import networkx as nx
 from PIL import Image
 
 # __all__ = ['get_connected_component', 'baz']
