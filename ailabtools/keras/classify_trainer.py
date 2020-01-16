@@ -14,7 +14,8 @@ try:
 except:
     from keras_applications import mobilenet_v2
 from ailabtools.zaco import LabelTask
-from ailabtools.keras.callbacks import TrainValTensorBoard
+# from ailabtools.keras.callbacks import TrainValTensorBoard
+from keras.callbacks.tensorboard_v1 import TensorBoard as TrainValTensorBoard
 from ailabtools.keras.pairgenerator import PairDataGenerator
 import ailabtools.statistic as st
 
@@ -45,7 +46,8 @@ def build_callbacks(model_name, base_log='.', base_lr=0.001):
         drop_step = 5
         return base_lr*(0.9**(int(epoch/drop_step)))
 
-    callbacks = [TrainValTensorBoard(log_dir=log_dir), 
+    callbacks = [
+                #TrainValTensorBoard(log_dir=log_dir), 
                  ModelCheckpoint(train_dir
                                  +'/weights.{epoch:02d}-loss-{loss:.5f}-vloss-{val_loss:.5f}.hdf5', 
                                  monitor='val_loss', 
@@ -141,14 +143,16 @@ def train_classifier(train_set,
     num_worker=4,
     need_aug_data=True,
     mnet_alpha=1.0,
+    load_func=None,
     **kwargs
 ):
     train_x, train_y = train_set
 
     # construct model
     print('Constructing model...')
-    input = keras.layers.Input(input_shape)
+    
     if model == None:
+        input = keras.layers.Input(input_shape)
         print('\tNo specified model, using MobilenetV2 1.0 as default')
         backbone = mobilenet_v2.MobileNetV2(input_shape=input_shape, alpha=mnet_alpha, include_top=False, pooling=None)
         backbone_x = backbone(input)
@@ -182,7 +186,7 @@ def train_classifier(train_set,
     if val_set is not None:
         gen_val = PairDataGenerator(preprocessing_function=preprocess_image)
 
-    train_iter = gen.flow_from_pair(train_x, train_y, batch_size=batch_size, target_size=input_shape[:2], need_augmentation=need_aug_data)
+    train_iter = gen.flow_from_pair(train_x, train_y, batch_size=batch_size, load_func=load_func, target_size=input_shape[:2], need_augmentation=need_aug_data)
     print('\tClass maping...')
     class_map = train_iter.class_indices
     for k, v in class_map.items():
@@ -192,7 +196,7 @@ def train_classifier(train_set,
     val_step = 0
     if val_set is not None:
         val_x, val_y = val_set
-        val_iter = gen_val.flow_from_pair(val_x, val_y, batch_size=batch_size, target_size=input_shape[:2], need_augmentation=False)
+        val_iter = gen_val.flow_from_pair(val_x, val_y, batch_size=batch_size, load_func=load_func, target_size=input_shape[:2], need_augmentation=False)
         val_step = len(val_x)//batch_size+1
     print('Constructing generator... DONE')
 

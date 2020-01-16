@@ -10,7 +10,7 @@ import requests
 from io import BytesIO
 
 def load_img_func(fname, target_size, data_format):
-    if fname.startswith('https://supplier.lab.zalo.ai/routing'):
+    if fname.startswith('http'):
         # from labeling server
         response = requests.get(fname)
         img = Image.open(BytesIO(response.content)).resize(target_size).convert('RGB')

@@ -16,7 +16,7 @@ with open("README.md", "r") as fh:
 setup(
     name='ailabtools',
     packages=['ailabtools', 'ailabtools.keras', 'ailabtools.imgutils', 'ailabtools.mass_detector', 'ailabtools.utils'],
-    version='0.0.48',
+    version='0.0.60',
     author="Zalo AILab",
     description='Common tools for Zalo AILab',
     long_description=long_description,

@@ -3,7 +3,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
 import math
-from PIL import Image
+from PIL import Image, ImageDraw
 import os
 
 def show_multi_image(imgs):
