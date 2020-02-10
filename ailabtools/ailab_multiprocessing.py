@@ -1,6 +1,7 @@
 from multiprocessing import Pool, cpu_count
-from multiprocessing.pool import ThreadPool
-from tqdm import tqdm
+from multiprocessing.pool import ThreadPoo
+#from tqdm import tqdm
+from  ailabtools.utils import tqdm_ailab as tqdm
 
 def pool_worker(target, inputs, use_thread=False, num_worker=None, verbose=True):
     """Run target function in multi-process
