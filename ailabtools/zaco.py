@@ -34,7 +34,7 @@ class LabelTask:
         if not annotation_file == None:
             print('loading annotations into memory...')
             tic = time.time()
-            label_task_data = json.load(open(annotation_file, 'r'))
+            label_task_data = json.load(open(annotation_file, 'r', encoding="utf8"))
             assert type(label_task_data)==dict, 'annotation file format {} not supported'.format(type(label_task_data))
             print('Done (t={:0.2f}s)'.format(time.time() - tic))
             self.label_task_data = label_task_data

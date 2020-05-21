@@ -8,3 +8,11 @@ def makedirs(p):
 
 def ensure_dir(p):
     makedirs(dir_path(p))
+
+def readlines(file, spliter=None):
+    with open(file, 'r', encoding='utf8') as f:
+        all_line = f.readlines()
+        all_line = [l.strip() for l in all_line]
+        if spliter is not None:
+            all_line = [l.split(spliter) for l in all_line]
+    return all_line
